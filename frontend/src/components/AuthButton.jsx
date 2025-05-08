@@ -27,7 +27,6 @@ function AuthButton() {
       }
   ];
 
-
     const login = useGoogleLogin({
       onSuccess: tokenResponse => {
         console.log(tokenResponse)
@@ -43,7 +42,6 @@ function AuthButton() {
         })
       },
     });
-  
   
     const loggedIN = <div>
       <img onClick={(event) => menuRight.current.toggle(event)} aria-controls="popup_menu_right" aria-haspopup style={{borderRadius:'100%'}} width={50} height={50} src={localStorage.getItem('image') || ''} alt="" />
