@@ -2,6 +2,7 @@ const router = require('express').Router();
 const mongoose = require('mongoose');
 const DateModel = require('../models/dateModel')
 const jwt = require('jsonwebtoken');
+const yearModel = require('../models/yearModel');
 
 router.get('/', async (req, res)=>{
     const {date} = (req.query);
@@ -15,22 +16,61 @@ router.get('/', async (req, res)=>{
 
 router.post('/', async (req, res)=>{
     try{
-        const {title, content, image, mood} = req.body;
+        const {title, content, image, mood } = req.body;
         const token = req.headers.authorization;
         const {_id} = jwt.decode(token)
         console.log(_id);
+
+        const date = new Date(req.body.date);
+        let entry = await DateModel.findOne({user: _id, date})
+        if(!entry){
+            entry = await DateModel.create({
+                user: _id,
+                title, 
+                content, 
+                image, 
+                mood,
+                date
+            })
+        }else{
+            entry.title = title;
+            entry.content = content;
+            entry.image = image;
+            entry.mood = mood;
+            entry.save();
+        }
         
-        const entry = await DateModel.create({
-            user: _id,
-            title, 
-            content, 
-            image, 
-            mood,
-        })
-        console.log(entry);
-        res.status(200).send("Wonderful")
+        console.log("user found")
+        let yearEntry = await yearModel.findOne({user: _id, year:date.getUTCFullYear()});
+        if(!yearEntry){
+            yearEntry = await yearModel.create({
+                user: _id,
+                year: date.getUTCFullYear(),
+                data: [{date, mood}]
+            })
+        }else{
+            let exists = false; 
+            yearEntry.data.forEach((item, index)=>{
+                if(new Date(item.date).getUTCDate() == date.getUTCDate() && new Date(item.date).getUTCMonth() == date.getUTCMonth()){
+                    exists = true;
+                    yearEntry.data[index].mood = mood;
+                    console.log("Date Found!!!");
+                }
+            })
+            if(!exists){
+                yearEntry.data = [...yearEntry.data, {date, mood}];
+            }
+            yearEntry.save()
+            // console.log(result);
+        }
+
+        // yearEntry.data = [...yearEntry.data,{mood: 'yellow'}]
+        // yearEntry.save();
+        // console.log(yearEntry)
+        // console.log(entry);
+        res.status(200).send("Wonderful");
     }catch(err){
-        res.status(500).send("Server Error While Adding Date Entry")
+        res.status(500).json({"message":"Server Error While Adding Date Entry", "Error": err})
     }
 })
 
