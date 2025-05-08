@@ -79,7 +79,7 @@ function Write() {
         <InputTextarea value={descVal} onChange={(e) => setDescVal(e.target.value)} style={{width:'100%' , height:'30rem', resize:'none'}} rows={20}/>
         <br /><br />    
         <div style={{width:'100%', display:'flex'}}>
-            <Button onClick={handleUpdate} style={{marginLeft: 'auto'}} label="Success" severity="success" />
+            <Button onClick={handleUpdate} style={{marginLeft: 'auto'}} label="Save Changes" severity="success" />
         </div>
       </div>
     </div>

@@ -4,9 +4,11 @@ import axios from 'axios';
 import { useCookies } from "react-cookie";
 import { Menu } from 'primereact/menu';
 import { Button } from 'primereact/button';
+import { useNavigate } from 'react-router-dom';
 
 function AuthButton() {
     const [cookies, setCookies, removeCookie] = useCookies(["access_token"]);
+    const navigate = useNavigate();
     const menuRight = useRef(null);
     const items = [
       {
@@ -35,6 +37,7 @@ function AuthButton() {
           localStorage.setItem('username', res.data.user.name)
           localStorage.setItem('email', res.data.user.email)
           localStorage.setItem('image', res.data.user.image)
+          navigate('/')
         }).catch((err)=>{
           console.error(err);
         })
