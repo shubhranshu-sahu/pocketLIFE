@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useCookies } from "react-cookie";
 import { useParams } from 'react-router-dom';
 import { Toast } from 'primereact/toast';
+import AuthButton from './AuthButton';
 
 function Write() {
     const [cookies, _] = useCookies(["access_token"]);
@@ -63,7 +64,10 @@ function Write() {
     {/* <Button onClick={show} label="Show" /> */}
 
     <div className="container" style={{flexDirection:'column'}}>
-      <h1>{new Date(date).toDateString()} Entry</h1>
+        <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+            <h1>{new Date(date).toDateString()} Entry</h1>
+            <AuthButton/>
+        </div>
       <InputText style={{width:'100%'}} value={titleVal} onChange={(e) => setTitleVal(e.target.value)} />
     </div>
     <br />

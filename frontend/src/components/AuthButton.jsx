@@ -1,10 +1,30 @@
-import React from 'react'
+import React,{useRef} from 'react'
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import { useCookies } from "react-cookie";
+import { Menu } from 'primereact/menu';
+import { Button } from 'primereact/button';
 
 function AuthButton() {
     const [cookies, setCookies, removeCookie] = useCookies(["access_token"]);
+    const menuRight = useRef(null);
+    const items = [
+      {
+          label: 'Options',
+          items: [
+              {
+                label: 'Log Out',
+                style: {'fontSize':"12px"},
+                icon: 'pi pi-sign-out',
+                command(event) {
+                    event.originalEvent.type === 'click' && removeCookie("access_token")
+                    window.location.reload();
+                },
+              },
+          ]
+      }
+  ];
+
 
     const login = useGoogleLogin({
       onSuccess: tokenResponse => {
@@ -23,16 +43,14 @@ function AuthButton() {
   
   
     const loggedIN = <div>
-      <h1>User Logged IN</h1>
-      <h3>{localStorage.getItem('username')}</h3>
-      <h3>{localStorage.getItem('email')}</h3>
-      <img width={100} height={100} src={localStorage.getItem('image') || ''} alt="" />
-      <br />
-      <button onClick={()=>removeCookie('access_token')}>Log Out</button>
+      <img onClick={(event) => menuRight.current.toggle(event)} aria-controls="popup_menu_right" aria-haspopup style={{borderRadius:'100%'}} width={50} height={50} src={localStorage.getItem('image') || ''} alt="" />
+      <Menu model={items} popup ref={menuRight} id="popup_menu_right" popupAlignment="right" />
+      {/* <Button label="Show Right" icon="pi pi-align-right" className="mr-2" onClick={(event) => menuRight.current.toggle(event)} aria-controls="popup_menu_right" aria-haspopup /> */}
+      {/* <button onClick={()=>removeCookie('access_token')}>Log Out</button> */}
     </div>
     return (
       <div>
-        {cookies.access_token ? loggedIN : <button onClick={()=>login()}>My Google</button> }
+        {cookies.access_token ? loggedIN : <Button severity='secondary' icon='pi pi-sign-in' outlined onClick={()=>login()} label='Login/Enter'/> }
     </div>
     )
 }

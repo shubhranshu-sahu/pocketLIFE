@@ -14,7 +14,7 @@ function App() {
       <Route path="/" element={<Navigate replace to={formattedDate}/>}/>
       <Route path='/:date' element={
       <>
-      <AuthButton/>
+      {/* <AuthButton/> */}
       <Write/>
       <br />
       <Heatmap/>
