@@ -18,17 +18,18 @@ body{
     /* overflow-x: scroll; */
     /* overflow-y: hidden; */
     /* border: 1px solid rgb(204, 206, 211); */
-    height: 8rem;
+    height: 12rem;
     /* border-radius: 10px; */
-    max-width: 1002px;
+    max-width: 1000px;
+
 }
 
 #heatmap{
-    width: 1000px;
+    width: 975px;
     display: grid;
     height: 100%;
     grid-template-rows: repeat(7, 1fr);
-    grid-template-columns: repeat(55, 1fr);
+    grid-template-columns: repeat(53, 1fr);
     grid-gap: 4px;
 }
 
