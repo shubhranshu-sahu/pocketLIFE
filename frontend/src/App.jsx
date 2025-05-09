@@ -8,8 +8,14 @@ export const Context = React.createContext();
 
 function App() {
   const date = new Date();
-  const formattedDate = date.toISOString().split('T')[0];
-  const [today, setToday] = useState(new Date().toISOString().split('T')[0]); 
+  // console.log(date.toDateString());
+  function toTwoDigits(number) {
+    return String(number).padStart(2, '0');
+  }
+
+  const formattedDate = date.getFullYear()+'-'+ toTwoDigits(date.getMonth()+1)+'-'+toTwoDigits(date.getDate());
+  // console.log(formattedDate)
+  const [today, setToday] = useState(formattedDate); 
   const [changesMade, setChanges] = useState(false);
 
   return <>

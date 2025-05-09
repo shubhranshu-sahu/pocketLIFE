@@ -10,7 +10,10 @@ import AuthButton from './AuthButton';
 import { Context } from '../App'
 import MDropdown from './MDropdown';
 import Colours from './Colours';
-
+import { FileUpload } from 'primereact/fileupload';
+import MyInput from './MyInput';
+import MyTextbox from './MyTextbox';
+        
 
 function Write() {
     const [cookies, _] = useCookies(["access_token"]);
@@ -20,14 +23,14 @@ function Write() {
     let { date } = useParams();
     const toast = useRef(null);
     const [____, setChanges] = useContext(Context);
-    const [selectedMood, setSelectedMood] = useState(1);
+    const [selectedMood, setSelectedMood] = useState(2);
 
 
     const show = () => {
         toast.current.show({severity:'success', summary: 'Success', detail:'Saved Successfully!', life: 1000});
     };
-    const showWarn = () => {
-        toast.current.show({severity:'warn', summary: 'Warning', detail:'No Entry Found!', life: 1000});
+    const showWarn = (warn) => {
+        toast.current.show({severity:'warn', summary: 'Warning', detail:warn, life: 2000});
     }
 
     useEffect(()=>{
@@ -45,19 +48,46 @@ function Write() {
         }).catch(()=>{
             setTitleVal("Provide A Title");
             setDescVal('Provide A Desc');
-            setSelectedMood(1);
+            setSelectedMood(2);
             setImage('https://images.stockcake.com/public/f/6/2/f6200ac6-9e40-4081-a36d-51b45ead18c4_large/antique-journal-collection-stockcake.jpg');
-            showWarn()
+            // showWarn()
         })
     },[date])
 
+
+    const handleDrop = (event) => {
+        event.preventDefault();
+        const droppedFiles = event.dataTransfer.files;
+        console.log(droppedFiles)
+        onUpload(droppedFiles[0])
+      };
+
+    const onUpload = (file) => {
+        var formData = new FormData();
+        formData.append("image", file);
+        formData.append("date", date)
+        formData.append('mood', selectedMood);
+        formData.append('content', descVal)
+        formData.append("title", titleVal)
+        axios.post('http://localhost:3000/upload', formData, { 
+            headers:{
+                Authorization: cookies.access_token
+            }
+        }).then(res=>{
+            console.log(res.data);
+            setImage(res.data.image)
+            show();
+            setChanges(change => !change);
+        }).catch((err)=>{
+            console.error(err)
+        })
+    };
     
-    // date = new Date(date);
     function handleUpdate(){
         axios.post('http://localhost:3000/date',{
             title: titleVal,
             content: descVal,
-            image: 'https://i.pinimg.com/736x/24/66/a1/2466a17b21e6371ebc7a83ee36f6150e.jpg',
+            image: imageVal,
             mood: selectedMood,
             date: date
         },
@@ -71,6 +101,7 @@ function Write() {
             setChanges(change => !change);
         }).catch(err=>{
             console.error(err);
+            showWarn('Could Not Save Changes!')
         })
     }
 
@@ -81,21 +112,28 @@ function Write() {
 
     <div className="container" style={{flexDirection:'column'}}>
         <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
-            <h1>{new Date(date).toDateString()} Entry</h1>
+            <h1>{new Date(date).toDateString()} - Entry</h1>
             <div style={{display:'flex', gap:'10px'}}>
             <Colours selected={selectedMood} setSelected={setSelectedMood}/>
             <AuthButton/>
             </div>
         </div>
-      <InputText style={{width:'100%'}} value={titleVal} onChange={(e) => setTitleVal(e.target.value)} />
+      <MyInput textVal={titleVal} setTextVal={setTitleVal}/>
+      {/* <InputText style={{width:'100%'}} value={titleVal} onChange={(e) => setTitleVal(e.target.value)} /> */}
     </div>
     <br />
     <div className="container">
-      <div style={{ height:'30rem', display:'flex', flexDirection:'column', alignItems:'center', gap:'6px', border:'1px dashed'}}>
-          <img src={imageVal} style={{objectFit:'cover', height:'100%'}} width={300} alt=""/>
+      <div style={{ height:'30rem', display:'flex', flexDirection:'column', alignItems:'center', gap:'6px', border:'1px dashed rgba(1,1,1,0.35)'}}>
+            <label onDragOver={(event) => event.preventDefault()} onDrop={handleDrop} for="myFile" class="custom-file-upload">
+          <img src={imageVal} style={{objectFit:'contain', height:'100%'}} width={300} alt=""/>
+            {/* Custom Upload */}
+            </label>
+           <input  type="file" id="myFile" accept="image/*" name="filename" onChange={(e)=>onUpload(e.target.files[0])}/>
+
       </div>
       <div style={{maxWidth:'700px',flex:1, marginLeft:'2rem'}}>
-        <InputTextarea value={descVal} onChange={(e) => setDescVal(e.target.value)} style={{width:'100%' , height:'30rem', resize:'none'}} rows={20}/>
+        <MyTextbox textArea={descVal} setTextArea={setDescVal}/>
+        {/* <InputTextarea value={descVal} onChange={(e) => setDescVal(e.target.value)} style={{width:'100%' , height:'30rem', resize:'none'}} rows={20}/> */}
         <br /><br />    
         <div style={{width:'100%', display:'flex', justifyContent:'end', gap:'6px'}}>
             <MDropdown/>

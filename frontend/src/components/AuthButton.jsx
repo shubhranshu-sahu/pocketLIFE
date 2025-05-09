@@ -5,8 +5,6 @@ import { useCookies } from "react-cookie";
 import { Menu } from 'primereact/menu';
 import { Button } from 'primereact/button';
 import { useNavigate } from 'react-router-dom';
-import { ProgressSpinner } from 'primereact/progressspinner';
-import { Dialog } from 'primereact/dialog';
 import { Toast } from 'primereact/toast';
 
 function AuthButton() {
@@ -61,7 +59,7 @@ function AuthButton() {
     return (
       <div>
         <Toast ref={toast} />
-        {cookies.access_token ? loggedIN : <Button severity='secondary' icon='pi pi-sign-in' outlined onClick={()=>{login()}} label='Login/Enter'/> }
+        {cookies.access_token ? loggedIN : <Button severity='info' rounded raised icon='pi pi-sign-in' onClick={()=>{login()}} label='Login/Enter'/> }
     </div>
     )
 }

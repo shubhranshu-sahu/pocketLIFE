@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Baskervville:ital@0;1&family=Indie+Flower&display=swap');
+
 body{
     background: url('/bg.jpg');
     background-position: center;
@@ -12,32 +14,49 @@ body{
     /* margin-block: 20px; */
 }
 
-#heatmap-container{
-    display: block;
-    overflow: scroll;
-    /* overflow-x: scroll; */
-    /* overflow-y: hidden; */
-    /* border: 1px solid rgb(204, 206, 211); */
-    height: 12rem;
-    /* border-radius: 10px; */
-    max-width: 1000px;
-
-}
-
-#heatmap{
-    width: 975px;
-    display: grid;
+input[type="file"] {
+    display: none;
+  }
+  
+.custom-file-upload {
+    /* border: 1px solid #ccc; */
+    /* display: inline-block; */
+    /* padding: 6px 12px; */
     height: 100%;
-    grid-template-rows: repeat(7, 1fr);
-    grid-template-columns: repeat(53, 1fr);
-    grid-gap: 4px;
+    cursor:copy;
 }
 
-.box{
-    border-radius: 3px;
+h1{
+    opacity: 0.4;
+    font-size: 24px;
+    /* text-decoration: underline; */
+}
+
+.color-box{
+    cursor: pointer;
+}
+
+input[type="text"]{
+    font-family: "Baskervville", serif;    background: transparent;
+    border: 1px dashed rgba(0, 0, 0, 0.35);
+    font-weight: bold;
+    padding: 10px;
+    outline: none;
+    /* border: none; */
+    font-size: 22px;
+}
+
+textarea{
+    /* font-family: "Indie Flower", cursive; */
+    font-family: "Indie Flower", cursive;
+    font-size: 20px;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.68);
     width: 100%;
-    height: 100%;
-    background: rgb(206, 206, 206);
-    font-size: 8px;
-    border: 1px solid rgba(0, 0, 0, 0.096);
+    resize: none;
+    background: transparent;
+    outline: none;
+    border: 1px dashed rgba(0, 0, 0, 0.35);
+    padding: 10px;
+    height: 30rem;
 }

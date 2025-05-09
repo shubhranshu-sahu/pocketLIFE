@@ -38,7 +38,7 @@ router.post('/', async (req, res)=>{
             entry.content = content;
             entry.image = image;
             entry.mood = mood;
-            entry.save();
+            await entry.save();
         }
         
         console.log("user found")

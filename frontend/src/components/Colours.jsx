@@ -6,7 +6,7 @@ function Colours({selected, setSelected}) {
 
     return <div style={{display:'grid', gridTemplateRows:'repeat(2, 20px)', gridTemplateColumns:'repeat(2, 20px)', alignContent:'center', gridGap:'4px'}}>
             {mood.map((item, index)=>{
-                return <div onClick={()=>setSelected(index+1)} style={{background:item, width:'20px', height:'20px', borderRadius:'100%', border:`3px solid ${selected == index+1 ? 'black' : 'transparent'}`}}></div>
+                return <div className='color-box' onClick={()=>setSelected(index+1)} style={{background:item, width:'20px', height:'20px', borderRadius:'100%', border:`3px solid ${selected == index+1 ? 'black' : 'transparent'}`}}></div>
             })}
     </div>
 }
