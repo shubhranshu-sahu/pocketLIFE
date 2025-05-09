@@ -9,6 +9,7 @@ import { Toast } from 'primereact/toast';
 import AuthButton from './AuthButton';
 import { Context } from '../App'
 import MDropdown from './MDropdown';
+import Colours from './Colours';
 
 
 function Write() {
@@ -18,14 +19,15 @@ function Write() {
     const [imageVal, setImage] = useState("https://images.stockcake.com/public/f/6/2/f6200ac6-9e40-4081-a36d-51b45ead18c4_large/antique-journal-collection-stockcake.jpg");
     let { date } = useParams();
     const toast = useRef(null);
-    const [changes, setChanges] = useContext(Context);
+    const [____, setChanges] = useContext(Context);
+    const [selectedMood, setSelectedMood] = useState(1);
 
 
     const show = () => {
-        toast.current.show({severity:'success', summary: 'Success', detail:'Saved Successfully!', life: 3000});
+        toast.current.show({severity:'success', summary: 'Success', detail:'Saved Successfully!', life: 1000});
     };
     const showWarn = () => {
-        toast.current.show({severity:'warn', summary: 'Warning', detail:'No Entry Found!', life: 3000});
+        toast.current.show({severity:'warn', summary: 'Warning', detail:'No Entry Found!', life: 1000});
     }
 
     useEffect(()=>{
@@ -37,11 +39,13 @@ function Write() {
             console.log(res)
             const {title, content, image, mood} = (res.data);
             setTitleVal(title);
+            setSelectedMood(mood);
             setDescVal(content);
             setImage(image);
         }).catch(()=>{
             setTitleVal("Provide A Title");
             setDescVal('Provide A Desc');
+            setSelectedMood(1);
             setImage('https://images.stockcake.com/public/f/6/2/f6200ac6-9e40-4081-a36d-51b45ead18c4_large/antique-journal-collection-stockcake.jpg');
             showWarn()
         })
@@ -54,7 +58,7 @@ function Write() {
             title: titleVal,
             content: descVal,
             image: 'https://i.pinimg.com/736x/24/66/a1/2466a17b21e6371ebc7a83ee36f6150e.jpg',
-            mood: 2,
+            mood: selectedMood,
             date: date
         },
         {
@@ -72,13 +76,16 @@ function Write() {
 
   return (
     <>
-    <Toast ref={toast} />
+    <Toast ref={toast} position="bottom-right"/>
     {/* <Button onClick={show} label="Show" /> */}
 
     <div className="container" style={{flexDirection:'column'}}>
         <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
             <h1>{new Date(date).toDateString()} Entry</h1>
+            <div style={{display:'flex', gap:'10px'}}>
+            <Colours selected={selectedMood} setSelected={setSelectedMood}/>
             <AuthButton/>
+            </div>
         </div>
       <InputText style={{width:'100%'}} value={titleVal} onChange={(e) => setTitleVal(e.target.value)} />
     </div>

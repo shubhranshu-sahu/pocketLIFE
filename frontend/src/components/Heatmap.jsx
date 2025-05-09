@@ -12,7 +12,7 @@ function Heatmap() {
     // const boxes = Array.from(Array(365));
     const navigate = useNavigate();
     const [dates, setDates] = useState([]);
-    const [changes, __, today, setToday] = useContext(Context);
+    const [changes, __, today] = useContext(Context);
 
 
     // const today = new Date();
@@ -28,11 +28,22 @@ function Heatmap() {
         Authorization: cookies.access_token
       }}).then((res)=>{
       var boxes = [];
-      console.log(res)
+      // console.log(res)
       
-      const howFarBehind = 1000;
-      var day = shiftDate(today, -howFarBehind);
-      for(let i=0; i<howFarBehind; i++){
+      var howFarBehind = 1000;
+
+      axios.get('http://localhost:3000/year/used', {
+        headers:{
+          Authorization: cookies.access_token
+        }
+      }).then((allYears)=>{
+        const usedYears = allYears.data.sort();
+        const diff = usedYears[usedYears.length-1]-usedYears[0]+2;
+        // console.log("diff:",diff)
+        howFarBehind = 365*diff;
+        
+        var day = shiftDate(today, -howFarBehind);
+        for(let i=0; i<howFarBehind; i++){
         var nextDay = new Date(day);
         nextDay.setDate(day.getDate() + 1);
         boxes.push({"date": nextDay.toISOString().split('T')[0], "count": 0})
@@ -48,6 +59,7 @@ function Heatmap() {
         }
       )
       setDates(boxes)
+    })
     }).catch(()=>{
       console.error("Got Error while getting Dates")
     })
