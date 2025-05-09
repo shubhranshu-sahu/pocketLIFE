@@ -9,7 +9,7 @@ export const Context = React.createContext();
 function App() {
   const date = new Date();
   const formattedDate = date.toISOString().split('T')[0];
-  
+  const [today, setToday] = useState(new Date().toISOString().split('T')[0]); 
   const [changesMade, setChanges] = useState(false);
 
   return <>
@@ -19,10 +19,10 @@ function App() {
       <Route path='/:date' element={
       <>
       {/* <AuthButton/> */}
-      <Context.Provider value={[changesMade, setChanges]}>
+      <Context.Provider value={[changesMade, setChanges, today, setToday]}>
       <Write/>
       <br />
-      <Heatmap/>
+      <Heatmap today={today}/>
       </Context.Provider>
       </>
       }/>

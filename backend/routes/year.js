@@ -22,4 +22,20 @@ router.get('/', async (req, res)=>{
     res.json(newData);
 })
 
+router.get('/used', async (req,res)=>{
+    const token = req.headers.authorization;
+    const {_id} = jwt.decode(token);
+    const data = await yearModel.find({user:_id });
+    if(!data){
+        return res.status(500).send('No Data Found for this year');
+    }
+    var years = [];
+    console.log(data);
+    data.forEach(item=>{
+        years.push(item.year);
+    })
+    res.json(years);
+
+})
+
 module.exports = router

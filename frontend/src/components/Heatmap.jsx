@@ -12,10 +12,10 @@ function Heatmap() {
     // const boxes = Array.from(Array(365));
     const navigate = useNavigate();
     const [dates, setDates] = useState([]);
-    const [changes, setChanges] = useContext(Context);
+    const [changes, __, today, setToday] = useContext(Context);
 
 
-    const today = new Date();
+    // const today = new Date();
     function shiftDate(date, numDays) {
       const newDate = new Date(date);
       newDate.setDate(newDate.getDate() + numDays);
@@ -30,8 +30,9 @@ function Heatmap() {
       var boxes = [];
       console.log(res)
       
-      var day = shiftDate(today, -365);
-      for(let i=0; i<365; i++){
+      const howFarBehind = 1000;
+      var day = shiftDate(today, -howFarBehind);
+      for(let i=0; i<howFarBehind; i++){
         var nextDay = new Date(day);
         nextDay.setDate(day.getDate() + 1);
         boxes.push({"date": nextDay.toISOString().split('T')[0], "count": 0})

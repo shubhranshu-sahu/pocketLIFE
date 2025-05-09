@@ -8,6 +8,7 @@ import { useParams } from 'react-router-dom';
 import { Toast } from 'primereact/toast';
 import AuthButton from './AuthButton';
 import { Context } from '../App'
+import MDropdown from './MDropdown';
 
 
 function Write() {
@@ -18,6 +19,7 @@ function Write() {
     let { date } = useParams();
     const toast = useRef(null);
     const [changes, setChanges] = useContext(Context);
+
 
     const show = () => {
         toast.current.show({severity:'success', summary: 'Success', detail:'Saved Successfully!', life: 3000});
@@ -88,8 +90,9 @@ function Write() {
       <div style={{maxWidth:'700px',flex:1, marginLeft:'2rem'}}>
         <InputTextarea value={descVal} onChange={(e) => setDescVal(e.target.value)} style={{width:'100%' , height:'30rem', resize:'none'}} rows={20}/>
         <br /><br />    
-        <div style={{width:'100%', display:'flex'}}>
-            <Button onClick={handleUpdate} style={{marginLeft: 'auto'}} label="Save Changes" severity="success" />
+        <div style={{width:'100%', display:'flex', justifyContent:'end', gap:'6px'}}>
+            <MDropdown/>
+            <Button onClick={handleUpdate} style={{}} label="Save Changes" severity="success" />
         </div>
       </div>
     </div>
