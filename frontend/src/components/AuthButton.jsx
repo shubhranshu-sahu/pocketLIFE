@@ -5,11 +5,20 @@ import { useCookies } from "react-cookie";
 import { Menu } from 'primereact/menu';
 import { Button } from 'primereact/button';
 import { useNavigate } from 'react-router-dom';
+import { ProgressSpinner } from 'primereact/progressspinner';
+import { Dialog } from 'primereact/dialog';
+import { Toast } from 'primereact/toast';
 
 function AuthButton() {
     const [cookies, setCookies, removeCookie] = useCookies(["access_token"]);
     const navigate = useNavigate();
     const menuRight = useRef(null);
+    const toast = useRef(null);
+
+    const showError = () => {
+        toast.current.show({severity:'error', summary: 'Error', detail:'Login Failed', life: 3000});
+    }
+
     const items = [
       {
           label: 'Options',
@@ -21,17 +30,17 @@ function AuthButton() {
                 command(event) {
                     event.originalEvent.type === 'click' && removeCookie("access_token")
                     window.location.reload();
+                  },
                 },
-              },
-          ]
-      }
+              ]
+            }
   ];
 
     const login = useGoogleLogin({
       onSuccess: tokenResponse => {
         console.log(tokenResponse)
+        // show(); 
         axios.get(`http://localhost:3000/auth?code=${tokenResponse['access_token']}`).then((res)=>{
-          console.log(res.data);
           setCookies('access_token', res.data.token);
           localStorage.setItem('username', res.data.user.name)
           localStorage.setItem('email', res.data.user.email)
@@ -39,19 +48,20 @@ function AuthButton() {
           navigate('/')
         }).catch((err)=>{
           console.error(err);
+          showError()
         })
       },
     });
   
+
     const loggedIN = <div>
       <img onClick={(event) => menuRight.current.toggle(event)} aria-controls="popup_menu_right" aria-haspopup style={{borderRadius:'100%'}} width={50} height={50} src={localStorage.getItem('image') || ''} alt="" />
       <Menu model={items} popup ref={menuRight} id="popup_menu_right" popupAlignment="right" />
-      {/* <Button label="Show Right" icon="pi pi-align-right" className="mr-2" onClick={(event) => menuRight.current.toggle(event)} aria-controls="popup_menu_right" aria-haspopup /> */}
-      {/* <button onClick={()=>removeCookie('access_token')}>Log Out</button> */}
     </div>
     return (
       <div>
-        {cookies.access_token ? loggedIN : <Button severity='secondary' icon='pi pi-sign-in' outlined onClick={()=>login()} label='Login/Enter'/> }
+        <Toast ref={toast} />
+        {cookies.access_token ? loggedIN : <Button severity='secondary' icon='pi pi-sign-in' outlined onClick={()=>{login()}} label='Login/Enter'/> }
     </div>
     )
 }
