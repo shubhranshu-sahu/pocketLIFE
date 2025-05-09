@@ -10,8 +10,8 @@ router.get('/', async (req, res)=>{
     const {_id} = jwt.decode(token);
 
     const entry = await DateModel.findOne({date: date, user: _id})
-    console.log(entry);
-    res.send("Done");
+    // console.log(entry);
+    res.json(entry);
 })
 
 router.post('/', async (req, res)=>{
@@ -22,6 +22,7 @@ router.post('/', async (req, res)=>{
         console.log(_id);
 
         const date = new Date(req.body.date);
+        console.log(date)
         let entry = await DateModel.findOne({user: _id, date})
         if(!entry){
             entry = await DateModel.create({
@@ -41,17 +42,17 @@ router.post('/', async (req, res)=>{
         }
         
         console.log("user found")
-        let yearEntry = await yearModel.findOne({user: _id, year:date.getUTCFullYear()});
+        let yearEntry = await yearModel.findOne({user: _id, year:date.getFullYear()});
         if(!yearEntry){
             yearEntry = await yearModel.create({
                 user: _id,
-                year: date.getUTCFullYear(),
+                year: date.getFullYear(),
                 data: [{date, mood}]
             })
         }else{
             let exists = false; 
             yearEntry.data.forEach((item, index)=>{
-                if(new Date(item.date).getUTCDate() == date.getUTCDate() && new Date(item.date).getUTCMonth() == date.getUTCMonth()){
+                if(new Date(item.date).getDate() == date.getDate() && new Date(item.date).getMonth() == date.getMonth()){
                     exists = true;
                     yearEntry.data[index].mood = mood;
                     console.log("Date Found!!!");
@@ -61,13 +62,8 @@ router.post('/', async (req, res)=>{
                 yearEntry.data = [...yearEntry.data, {date, mood}];
             }
             yearEntry.save()
-            // console.log(result);
         }
 
-        // yearEntry.data = [...yearEntry.data,{mood: 'yellow'}]
-        // yearEntry.save();
-        // console.log(yearEntry)
-        // console.log(entry);
         res.status(200).send("Wonderful");
     }catch(err){
         res.status(500).json({"message":"Server Error While Adding Date Entry", "Error": err})

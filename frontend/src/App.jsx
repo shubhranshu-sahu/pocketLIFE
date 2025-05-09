@@ -1,13 +1,17 @@
-import React from 'react'
+import React,{useState} from 'react'
 import AuthButton from './components/AuthButton'
 import Write from './components/Write';
 import Heatmap from './components/Heatmap';
 import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
 
+export const Context = React.createContext();
+
 function App() {
   const date = new Date();
-  const formattedDate = (date.getFullYear()+'-'+(date.getMonth().toString().length == 1 ? '0' : '')+date.getMonth()+'-'+(date.getDate().toString().length == 1 ? '0' : '')+date.getDate())
+  const formattedDate = date.toISOString().split('T')[0];
   
+  const [changesMade, setChanges] = useState(false);
+
   return <>
     <Router>
     <Routes>
@@ -15,9 +19,11 @@ function App() {
       <Route path='/:date' element={
       <>
       {/* <AuthButton/> */}
+      <Context.Provider value={[changesMade, setChanges]}>
       <Write/>
       <br />
       <Heatmap/>
+      </Context.Provider>
       </>
       }/>
     </Routes>

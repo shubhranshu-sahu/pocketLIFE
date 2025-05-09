@@ -1,64 +1,64 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import CalendarHeatmap from 'react-calendar-heatmap';
 import '../heatmap.css'
 import { Tooltip } from 'react-tooltip'
-// import { ResponsiveCalendar } from '@nivo/calendar'
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { useCookies } from 'react-cookie';
+import { Context } from '../App'
 
 function Heatmap() {
+    const [cookies, _] = useCookies(["access_token"]);
     // const boxes = Array.from(Array(365));
+    const navigate = useNavigate();
     const [dates, setDates] = useState([]);
-    
+    const [changes, setChanges] = useContext(Context);
 
-    useEffect(()=>{
+
+    const today = new Date();
+    function shiftDate(date, numDays) {
+      const newDate = new Date(date);
+      newDate.setDate(newDate.getDate() + numDays);
+      return newDate;
+  }
+
+
+  useEffect(()=>{
+      axios.get(`http://localhost:3000/year`, {headers:{
+        Authorization: cookies.access_token
+      }}).then((res)=>{
       var boxes = [];
-      var day = new Date('2025-01-00');
-      for(let i=0; i<=366; i++){
+      console.log(res)
+      
+      var day = shiftDate(today, -365);
+      for(let i=0; i<365; i++){
         var nextDay = new Date(day);
         nextDay.setDate(day.getDate() + 1);
-        boxes.push({"date": nextDay.toISOString().split('T')[0], "count": Math.round(Math.random()*4)})
+        boxes.push({"date": nextDay.toISOString().split('T')[0], "count": 0})
         day = nextDay;
       }
-
-      setDates(boxes);
-      console.log(boxes)
-    },[])
-
-    const MyResponsiveCalendar = ({ data }) => (
-        <ResponsiveCalendar
-            data={data}
-            from="2025-03-01"
-            to="2025-07-12"
-            emptyColor="#eeeeee"
-            colors={[ '#61cdbb', '#97e3d5', '#e8c1a0', '#f47560' ]}
-            margin={{ top: 40, right: 40, bottom: 40, left: 40 }}
-            yearSpacing={40}
-            monthBorderColor="#ffffff"
-            dayBorderWidth={2}
-            dayBorderColor="#ffffff"
-            legends={[
-                {
-                    anchor: 'bottom-right',
-                    direction: 'row',
-                    translateY: 36,
-                    itemCount: 4,
-                    itemWidth: 42,
-                    itemHeight: 36,
-                    itemsSpacing: 14,
-                    itemDirection: 'right-to-left'
-                }
-            ]}
-        />
-    )
-
+      // console.log(res)
+      res.data.forEach(item=>{
+        const index = boxes.findIndex(bx=>bx.date == item.date.split('T')[0]);
+        if(index != -1){
+          boxes[index].count = item.mood;
+        }else
+          boxes.push({date: item.date.split('T')[0], count:3})
+        }
+      )
+      setDates(boxes)
+    }).catch(()=>{
+      console.error("Got Error while getting Dates")
+    })
+  },[changes])
 
   return (
       <>
       <Tooltip id='myid' />
-    <div id='heatmap-container' className='container'>
-      {/* {MyResponsiveCalendar(dates)} */}
-    <CalendarHeatmap
-        startDate={new Date('2024-12-30')}
-        endDate={new Date('2025-12-00')}
+      <div id='heatmap-container' className='container'>
+      <CalendarHeatmap
+        startDate={shiftDate(today, -365)}
+        endDate={today}
         showMonthLabels
         // showWeekdayLabels
         values={dates}
@@ -76,6 +76,7 @@ function Heatmap() {
           return {'data-tooltip-content': value.date, 'data-tooltip-id': 'myid'}
           ;
         }}
+        onClick={value => {navigate(`/${value.date}`)}}
         />
       
     </div>

@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react'
+import React, {useEffect, useState, useRef, useContext} from 'react'
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Button } from 'primereact/button';
@@ -7,6 +7,8 @@ import { useCookies } from "react-cookie";
 import { useParams } from 'react-router-dom';
 import { Toast } from 'primereact/toast';
 import AuthButton from './AuthButton';
+import { Context } from '../App'
+
 
 function Write() {
     const [cookies, _] = useCookies(["access_token"]);
@@ -15,10 +17,14 @@ function Write() {
     const [imageVal, setImage] = useState("https://images.stockcake.com/public/f/6/2/f6200ac6-9e40-4081-a36d-51b45ead18c4_large/antique-journal-collection-stockcake.jpg");
     let { date } = useParams();
     const toast = useRef(null);
+    const [changes, setChanges] = useContext(Context);
 
     const show = () => {
-        toast.current.show({severity:'success', summary: 'Success', detail:'Message Content', life: 3000});
+        toast.current.show({severity:'success', summary: 'Success', detail:'Saved Successfully!', life: 3000});
     };
+    const showWarn = () => {
+        toast.current.show({severity:'warn', summary: 'Warning', detail:'No Entry Found!', life: 3000});
+    }
 
     useEffect(()=>{
         axios.get(`http://localhost:3000/date?date=${date}`, {
@@ -31,19 +37,22 @@ function Write() {
             setTitleVal(title);
             setDescVal(content);
             setImage(image);
-        }).catch((err)=>{
-            console.log("no entry")
+        }).catch(()=>{
+            setTitleVal("Provide A Title");
+            setDescVal('Provide A Desc');
+            setImage('https://images.stockcake.com/public/f/6/2/f6200ac6-9e40-4081-a36d-51b45ead18c4_large/antique-journal-collection-stockcake.jpg');
+            showWarn()
         })
-    },[])
+    },[date])
 
-
+    
     // date = new Date(date);
     function handleUpdate(){
         axios.post('http://localhost:3000/date',{
             title: titleVal,
             content: descVal,
             image: 'https://i.pinimg.com/736x/24/66/a1/2466a17b21e6371ebc7a83ee36f6150e.jpg',
-            mood: 'green',
+            mood: 2,
             date: date
         },
         {
@@ -53,6 +62,7 @@ function Write() {
          }).then((res)=>{
             console.log(res);
             show()
+            setChanges(change => !change);
         }).catch(err=>{
             console.error(err);
         })

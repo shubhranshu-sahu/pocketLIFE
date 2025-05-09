@@ -42,8 +42,8 @@ const DateSchema = mongoose.Schema({
         default: ''
     },
     mood: {
-        type: String,
-        default: 'grey',
+        type: Number,
+        default: 1,
         required:true
     }
 })
