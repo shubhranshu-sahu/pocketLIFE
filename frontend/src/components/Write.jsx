@@ -123,7 +123,7 @@ function Write() {
     </div>
     <br />
     <div className="container">
-      <div style={{ height:'30rem', display:'flex', flexDirection:'column', alignItems:'center', gap:'6px', border:'1px dashed rgba(1,1,1,0.35)'}}>
+      <div className='img-bg' style={{background:`url(${imageVal})` ,height:'30rem', display:'flex', flexDirection:'column', alignItems:'center', gap:'6px', border:'1px dashed rgba(1,1,1,0.35)'}}>
             <label onDragOver={(event) => event.preventDefault()} onDrop={handleDrop} for="myFile" class="custom-file-upload">
           <img src={imageVal} style={{objectFit:'contain', height:'100%'}} width={300} alt=""/>
             {/* Custom Upload */}

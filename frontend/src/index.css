@@ -60,3 +60,22 @@ textarea{
     padding: 10px;
     height: 30rem;
 }
+.img-bg{
+    /* background: red !important; */
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    /* z-index: -3; */
+    &::before{
+        content: '';
+        position: absolute;
+        width: 100%;
+        z-index: 0;
+        height: 100%;
+        backdrop-filter: blur(8px);
+        /* background: red; */
+    }
+    label{
+        z-index: 1;
+    }
+}
