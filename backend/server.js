@@ -88,7 +88,7 @@ app.post('/upload', checkAuth ,upload.single('image'),async (req, res)=>{
   })
 
 app.get('/', (req, res) => {
-    res.send("Hi");
+    res.send("Server Running Fine...");
 })
 
 app.use('/protected', checkAuth, proRouter);
