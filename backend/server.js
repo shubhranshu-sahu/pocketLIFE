@@ -30,7 +30,7 @@ const storage = new CloudinaryStorage({
       folder: 'uploads',
     },
 });
-const upload = multer({ storage, limits: { fileSize: 15 * 1024 * 1024 }})
+const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 }})
 
 mongoose.connect(uri).then(()=>{
     console.log("Connect to DB");
@@ -94,8 +94,6 @@ app.get('/mongo', (req, res)=>{
 app.get('/', (req, res) => {
     res.send("Server Running Fine...");
 })
-
-app.use('/protected', checkAuth, proRouter);
 
 app.use('/date', checkAuth, dateRouter);
 app.use('/year', checkAuth, yearRouter)
