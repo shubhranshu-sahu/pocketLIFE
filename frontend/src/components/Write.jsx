@@ -34,7 +34,7 @@ function Write() {
     }
 
     useEffect(()=>{
-        axios.get(`http://localhost:3000/date?date=${date}`, {
+        axios.get(`https://pocket-lyf.vercel.app/date?date=${date}`, {
             headers:{
                 'Authorization': cookies.access_token
             }
@@ -69,7 +69,7 @@ function Write() {
         formData.append('mood', selectedMood);
         formData.append('content', descVal)
         formData.append("title", titleVal)
-        axios.post('http://localhost:3000/upload', formData, { 
+        axios.post('https://pocket-lyf.vercel.app/upload', formData, { 
             headers:{
                 Authorization: cookies.access_token
             }
@@ -84,7 +84,7 @@ function Write() {
     };
     
     function handleUpdate(){
-        axios.post('http://localhost:3000/date',{
+        axios.post('https://pocket-lyf.vercel.app/date',{
             title: titleVal,
             content: descVal,
             image: imageVal,

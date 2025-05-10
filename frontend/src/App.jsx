@@ -2,7 +2,7 @@ import React,{useState} from 'react'
 import AuthButton from './components/AuthButton'
 import Write from './components/Write';
 import Heatmap from './components/Heatmap';
-import {BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
+import {HashRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
 
 export const Context = React.createContext();
 

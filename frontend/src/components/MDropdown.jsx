@@ -11,7 +11,7 @@ function MDropdown() {
     const [___, __, ____, setToday] = useContext(Context);
 
     useEffect(()=>{
-        axios.get('http://localhost:3000/year/used', {headers:{
+        axios.get('https://pocket-lyf.vercel.app/year/used', {headers:{
             Authorization: cookies.access_token
         }}).then((res)=>{
             console.log(res)
