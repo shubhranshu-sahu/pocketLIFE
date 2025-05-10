@@ -24,7 +24,7 @@ function Heatmap() {
 
 
   useEffect(()=>{
-      axios.get(`https://pocket-lyf.vercel.app/year`, {headers:{
+      axios.get(`https://pocketlife.up.railway.app/year`, {headers:{
         Authorization: cookies.access_token
       }}).then((res)=>{
       var boxes = [];
@@ -32,7 +32,7 @@ function Heatmap() {
       
       var howFarBehind = 1000;
 
-      axios.get('https://pocket-lyf.vercel.app/year/used', {
+      axios.get('https://pocketlife.up.railway.app/year/used', {
         headers:{
           Authorization: cookies.access_token
         }

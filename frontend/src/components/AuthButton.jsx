@@ -38,7 +38,7 @@ function AuthButton() {
       onSuccess: tokenResponse => {
         console.log(tokenResponse)
         // show(); 
-        axios.get(`https://pocket-lyf.vercel.app/auth?code=${tokenResponse['access_token']}`).then((res)=>{
+        axios.get(`https://pocketlife.up.railway.app/auth?code=${tokenResponse['access_token']}`).then((res)=>{
           setCookies('access_token', res.data.token);
           localStorage.setItem('username', res.data.user.name)
           localStorage.setItem('email', res.data.user.email)
