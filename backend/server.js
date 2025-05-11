@@ -87,10 +87,6 @@ app.post('/upload', checkAuth ,upload.single('image'),async (req, res)=>{
     return res.status(200).json(obj);
   })
 
-app.get('/mongo', (req, res)=>{
-    res.send(uri);
-})
-
 app.get('/', (req, res) => {
     res.send("Server Running Fine...");
 })
