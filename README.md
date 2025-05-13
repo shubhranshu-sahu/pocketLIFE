@@ -10,6 +10,7 @@ A place to look back at your life and write the present
 TODO:
 - [ ] Adding AES to daily Entries
 - [ ] Adding more verbosity in client side for each request being.
+- [ ] Ability to delete entry
 - [ ] Login Required to Use the application - Dialog
 - [ ] Making it responsive
 - [ ] Ability to add more images in each day
