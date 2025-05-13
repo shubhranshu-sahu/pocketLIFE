@@ -8,6 +8,7 @@ A place to look back at your life and write the present
 > Site live at: https://ashish-um.github.io/pocketLIFE
 
 TODO:
-1. Adding AES to daily Entries
-2. Adding more verbosity in client side for each request being.
-3. Making it responsive
+- [ ] Adding AES to daily Entries
+- [ ] Adding more verbosity in client side for each request being.
+- [ ] Making it responsive
+- [ ] Ability to add more images in each day
