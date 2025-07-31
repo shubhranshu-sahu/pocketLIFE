@@ -6,7 +6,7 @@
 A beautiful and simple space to capture your daily thoughts, moments, and memories. This project is a digital journal designed for everyone to document their life's journey, one day at a time.
 > Site live at: https://ashish-um.github.io/pocketLIFE
 
-## 🌟 IDEOLOGY
+## 💡 IDEOLOGY
 
 Imagine you have a <ins>magic box</ins>.
 
